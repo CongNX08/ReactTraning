@@ -3,11 +3,21 @@ import { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { fetchAllUser } from "../services/UserService";
 import ReactPaginate from "react-paginate";
+import ModelAddNew from "./ModelAddNew";
 
 function TableUsers(props) {
   const [listUsers, setListUses] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [isShowModelAddNew, setIsShowModelAddNew] = useState(false);
+
+  const handleClose = () => {
+    setIsShowModelAddNew(false);
+  };
+
+  const handleUpdateTable = (user) => {
+    setListUses([user, ...listUsers]);
+  };
 
   useEffect(() => {
     // axios.get("https://reqres.in/api/users?page=2").then((data) => {
@@ -31,6 +41,17 @@ function TableUsers(props) {
   };
   return (
     <>
+      <div className="my-3 add-new">
+        <span>
+          <b>List Users:</b>
+        </span>
+        <button
+          className="btn btn-success"
+          onClick={() => setIsShowModelAddNew(true)}
+        >
+          Add new user
+        </button>
+      </div>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -74,6 +95,11 @@ function TableUsers(props) {
         containerClassName="pagination"
         activeClassName="active"
         // forcePage={pageOffset}
+      />
+      <ModelAddNew
+        show={isShowModelAddNew}
+        handleClose={handleClose}
+        handleUpdateTable={handleUpdateTable}
       />
     </>
   );
