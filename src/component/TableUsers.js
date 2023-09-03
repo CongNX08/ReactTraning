@@ -4,15 +4,21 @@ import Table from "react-bootstrap/Table";
 import { fetchAllUser } from "../services/UserService";
 import ReactPaginate from "react-paginate";
 import ModelAddNew from "./ModelAddNew";
+import ModelEditUser from "./ModelEditUser";
 
 function TableUsers(props) {
   const [listUsers, setListUses] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+
   const [isShowModelAddNew, setIsShowModelAddNew] = useState(false);
+  const [isShowModelEdit, setIsShowModelEdit] = useState(false);
+
+  const [dataUserEdit, setDataUserEdit] = useState({});
 
   const handleClose = () => {
     setIsShowModelAddNew(false);
+    setIsShowModelEdit(false);
   };
 
   const handleUpdateTable = (user) => {
@@ -39,6 +45,11 @@ function TableUsers(props) {
   const handlePageClick = (event) => {
     getUsers(+event.selected + 1);
   };
+  const handleEditUser = (user) => {
+    setDataUserEdit(user);
+    setIsShowModelEdit(true);
+  };
+
   return (
     <>
       <div className="my-3 add-new">
@@ -59,6 +70,7 @@ function TableUsers(props) {
             <th>Email</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -71,6 +83,15 @@ function TableUsers(props) {
                   <td>{item.email}</td>
                   <td>{item.first_name}</td>
                   <td>{item.last_name}</td>
+                  <td>
+                    <button
+                      className="btn-warning mx-3"
+                      onClick={() => handleEditUser(item)}
+                    >
+                      Edit
+                    </button>
+                    <button className="btn-danger">Delete</button>
+                  </td>
                 </tr>
               );
             })}
@@ -100,6 +121,12 @@ function TableUsers(props) {
         show={isShowModelAddNew}
         handleClose={handleClose}
         handleUpdateTable={handleUpdateTable}
+      />
+
+      <ModelEditUser
+        show={isShowModelEdit}
+        dataUserEdit={dataUserEdit}
+        handleClose={handleClose}
       />
     </>
   );
