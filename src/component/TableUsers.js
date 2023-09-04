@@ -63,7 +63,12 @@ function TableUsers(props) {
   const handleDeleteUser = (user) => {
     setIsShowModelDelete(true);
     setDataUserDelete(user);
-    console.log(user);
+  };
+
+  const handleDeleteUserFromModel = (user) => {
+    let cloneListUsers = _.cloneDeep(listUsers);
+    cloneListUsers = cloneListUsers.filter((item) => item.id !== user.id);
+    setListUsers(cloneListUsers);
   };
   return (
     <>
@@ -156,6 +161,7 @@ function TableUsers(props) {
         show={isShowModelDelete}
         handleClose={handleClose}
         dataUserDelete={dataUserDelete}
+        handleDeleteUserFromModel={handleDeleteUserFromModel}
       />
     </>
   );
