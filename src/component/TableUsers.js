@@ -27,6 +27,7 @@ function TableUsers(props) {
   const [sortField, setSortField] = useState("id");
 
   const [keyword, setKeyword] = useState("");
+  const [dataExport, setDataExport] = useState([]);
 
   const handleClose = () => {
     setIsShowModelAddNew(false);
@@ -100,12 +101,22 @@ function TableUsers(props) {
     }
   }, 500);
 
-  const csvData = [
-    ["firstname", "lastname", "email"],
-    ["Ahmed", "Tomi", "ah@smthing.co.com"],
-    ["Raed", "Labes", "rl@smthing.co.com"],
-    ["Yezzi", "Min l3b", "ymin@cocococo.com"],
-  ];
+  const getUsersExport = (event, done) => {
+    let result = [];
+    if (listUsers && listUsers.length > 0) {
+      result.push(["Id", "Email", "First Name", "Last Name"]);
+      listUsers.map((item, index) => {
+        let arr = [];
+        arr[0] = item.id;
+        arr[1] = item.email;
+        arr[2] = item.first_name;
+        arr[3] = item.last_name;
+        result.push(arr);
+      });
+      setDataExport(result);
+      done();
+    }
+  };
   return (
     <>
       <div className="my-3 add-new">
@@ -121,7 +132,9 @@ function TableUsers(props) {
           <CSVLink
             filename={"users.csv"}
             className="btn btn-primary"
-            data={csvData}
+            data={dataExport}
+            asyncOnClick={true}
+            onClick={getUsersExport}
           >
             <i className="fa-solid fa-file-arrow-down"></i>
             Export
