@@ -5,7 +5,7 @@ import { postCreateUser } from "../services/UserService";
 import { toast } from "react-toastify";
 
 function ModelAddNew(props) {
-  const { show, handleClose, handleUpdateTable } = props;
+  const { show, handleClose, handleCreateTable } = props;
   const [name, setName] = useState("");
   const [job, setJob] = useState("");
 
@@ -16,7 +16,7 @@ function ModelAddNew(props) {
       setName("");
       setJob();
       toast.success("User added successfully");
-      handleUpdateTable({ first_name: name, id: res.id });
+      handleCreateTable({ first_name: name, id: res.id });
     } else {
       toast.error("Something went wrong");
     }

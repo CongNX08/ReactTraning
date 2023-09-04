@@ -5,9 +5,10 @@ import { fetchAllUser } from "../services/UserService";
 import ReactPaginate from "react-paginate";
 import ModelAddNew from "./ModelAddNew";
 import ModelEditUser from "./ModelEditUser";
+import _ from "lodash";
 
 function TableUsers(props) {
-  const [listUsers, setListUses] = useState([]);
+  const [listUsers, setListUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -21,14 +22,18 @@ function TableUsers(props) {
     setIsShowModelEdit(false);
   };
 
-  const handleUpdateTable = (user) => {
-    setListUses([user, ...listUsers]);
+  const handleCreateTable = (user) => {
+    setListUsers([user, ...listUsers]);
+  };
+
+  const handleEditUserFromModal = (user) => {
+    let cloneListUsers = _.cloneDeep(listUsers);
+    let index = listUsers.findIndex((item) => item.id === user.id);
+    cloneListUsers[index].first_name = user.first_name;
+    setListUsers(cloneListUsers);
   };
 
   useEffect(() => {
-    // axios.get("https://reqres.in/api/users?page=2").then((data) => {
-    //   console.log(data);
-    // });
     getUsers(1);
   }, []);
 
@@ -37,7 +42,7 @@ function TableUsers(props) {
 
     if (res && res.data) {
       setTotalUsers(res.total);
-      setListUses(res.data);
+      setListUsers(res.data);
       setTotalPages(res.total_pages);
     }
   };
@@ -120,13 +125,14 @@ function TableUsers(props) {
       <ModelAddNew
         show={isShowModelAddNew}
         handleClose={handleClose}
-        handleUpdateTable={handleUpdateTable}
+        handleCreateTable={handleCreateTable}
       />
 
       <ModelEditUser
         show={isShowModelEdit}
         dataUserEdit={dataUserEdit}
         handleClose={handleClose}
+        handleEditUserFromModal={handleEditUserFromModal}
       />
     </>
   );
