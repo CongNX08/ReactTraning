@@ -5,6 +5,7 @@ import { fetchAllUser } from "../services/UserService";
 import ReactPaginate from "react-paginate";
 import ModelAddNew from "./ModelAddNew";
 import ModelEditUser from "./ModelEditUser";
+import ModelConfirm from "./ModelConfirm";
 import _ from "lodash";
 
 function TableUsers(props) {
@@ -13,13 +14,17 @@ function TableUsers(props) {
   const [totalPages, setTotalPages] = useState(0);
 
   const [isShowModelAddNew, setIsShowModelAddNew] = useState(false);
-  const [isShowModelEdit, setIsShowModelEdit] = useState(false);
 
+  const [isShowModelEdit, setIsShowModelEdit] = useState(false);
   const [dataUserEdit, setDataUserEdit] = useState({});
+
+  const [isShowModelDelete, setIsShowModelDelete] = useState(false);
+  const [dataUserDelete, setDataUserDelete] = useState({});
 
   const handleClose = () => {
     setIsShowModelAddNew(false);
     setIsShowModelEdit(false);
+    setIsShowModelDelete(false);
   };
 
   const handleCreateTable = (user) => {
@@ -55,6 +60,11 @@ function TableUsers(props) {
     setIsShowModelEdit(true);
   };
 
+  const handleDeleteUser = (user) => {
+    setIsShowModelDelete(true);
+    setDataUserDelete(user);
+    console.log(user);
+  };
   return (
     <>
       <div className="my-3 add-new">
@@ -95,7 +105,14 @@ function TableUsers(props) {
                     >
                       Edit
                     </button>
-                    <button className="btn-danger">Delete</button>
+                    <button
+                      className="btn-danger"
+                      onClick={() => {
+                        handleDeleteUser(item);
+                      }}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               );
@@ -133,6 +150,12 @@ function TableUsers(props) {
         dataUserEdit={dataUserEdit}
         handleClose={handleClose}
         handleEditUserFromModal={handleEditUserFromModal}
+      />
+
+      <ModelConfirm
+        show={isShowModelDelete}
+        handleClose={handleClose}
+        dataUserDelete={dataUserDelete}
       />
     </>
   );
