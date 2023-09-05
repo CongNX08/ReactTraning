@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { fetchAllUser } from "../services/UserService";
@@ -8,7 +7,7 @@ import ModelEditUser from "./ModelEditUser";
 import ModelConfirm from "./ModelConfirm";
 import _, { debounce } from "lodash";
 import "./TableUsers.scss";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 import Papa from "papaparse";
 import { toast } from "react-toastify";
 

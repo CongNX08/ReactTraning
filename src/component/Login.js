@@ -1,38 +1,29 @@
-import { useContext, useEffect, useState } from "react";
-import { loginApi } from "../services/UserService";
+import { useEffect, useState } from "react";
+
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+
+import { handleLoginRedux } from "../redux/actions/userAction";
+import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
   const navigate = useNavigate();
-  const { loginContext } = useContext(UserContext);
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isShowPassword, setIsShowPassword] = useState(false);
 
-  const [loadingAPI, setLoadingAPI] = useState(false);
+  const isLoading = useSelector((state) => state.user.isLoading);
+  const account = useSelector((state) => state.user.account);
 
   const handleLogin = async () => {
     if (!email || !password) {
       toast.error("Email/password is required");
       return;
     }
-    setLoadingAPI(true);
 
-    let res = await loginApi(email.trim(), password);
-    if (res && res.token) {
-      loginContext(email, res.token);
-
-      navigate("/");
-    } else {
-      //error
-      if (res && res.status === 400) {
-        toast.error(res.data.error);
-      }
-    }
-    setLoadingAPI(false);
+    dispatch(handleLoginRedux(email, password));
   };
 
   const handleGoBack = () => {
@@ -44,6 +35,12 @@ function Login() {
       handleLogin();
     }
   };
+
+  useEffect(() => {
+    if (account && account.auth === true) {
+      navigate("/");
+    }
+  }, [account]);
   return (
     <>
       <div className="login-container col-12 col-sm-4">
@@ -77,7 +74,7 @@ function Login() {
           disabled={email && password ? false : true}
           onClick={() => handleLogin()}
         >
-          {loadingAPI && <i className="fa-solid fa-sync fa-spin"></i>}
+          {isLoading && <i className="fa-solid fa-sync fa-spin"></i>}
           &nbsp; Login
         </button>
         <div className="back">
