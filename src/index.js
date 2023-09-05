@@ -12,11 +12,15 @@ import { BrowserRouter } from "react-router-dom";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 
+import ErrorBoundary from "./component/ErrorBoundary/Error";
+
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <BrowserRouter>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </BrowserRouter>
     </React.StrictMode>
   </Provider>,
